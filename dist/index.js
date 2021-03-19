@@ -10513,7 +10513,15 @@ function determineFileLocation(path, offset, parseOptions) {
     });
 }
 function transClangLevel(level) {
-    return level.toLowerCase();
+    if (level === "Warning") {
+        return "warning";
+    }
+    else if (level === "Error") {
+        return "failure";
+    }
+    else {
+        return "notice";
+    }
 }
 function parseReplacementsFile(path, options = {}) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -10534,7 +10542,7 @@ function parseReplacementsFile(path, options = {}) {
         return Promise.all(doc.Diagnostics.filter(diag => diag.DiagnosticMessage.FilePath.length > 0).map((diag) => __awaiter(this, void 0, void 0, function* () {
             // core.debug(`Processing diagnostic: ${JSON.stringify(diag)}`)
             return {
-                level: transClangLevel(diag.Level),
+                level: transClangLevel(diag.Level) || "warning",
                 name: diag.DiagnosticName,
                 message: diag.DiagnosticMessage.Message,
                 filePath: diag.DiagnosticMessage.FilePath,
