@@ -4926,12 +4926,14 @@ function run() {
             let cnt = 0;
             for (const file of diagsMap.keys()) {
                 const diags = diagsMap.get(file);
-                console.log(file);
+                core.startGroup(file);
+                core.info(file);
                 for (const diag of diags) {
                     output.fileError(`${diag.message} (${diag.name})`, path_1.relative(process.cwd(), diag.filePath), diag.location.line, diag.location.column);
                     cnt += 1;
                 }
-                console.log("");
+                core.info("");
+                core.endGroup();
             }
             if (!noFailure && cnt > 0) {
                 core.setFailed(`Found ${cnt} clang-tidy issues`);
@@ -4951,12 +4953,32 @@ run().catch(e => core.error(e));
 /***/ }),
 
 /***/ 768:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.fileWarning = exports.fileError = void 0;
+exports.fileWarning = exports.fileError = exports.escape = void 0;
+const core = __importStar(__webpack_require__(186));
 /* eslint-disable no-console */
 function escapeData(s) {
     return s.replace(/\r/g, "%0D").replace(/\n/g, "%0A");
@@ -4968,19 +4990,19 @@ function escape(s) {
         .replace(/]/g, "%5D")
         .replace(/;/g, "%3B");
 }
+exports.escape = escape;
 function output(type, message, file, line, column) {
     //const text = `::${type} file=${escape(file)},line=${line},col=${column}::${escapeData(message)}`;
-    const text = ` ${line}:${column}   ${type}    ${message}`;
-    // eslint-disable-next-line no-console
+    const text = ` ${line}:${column}   ${type}    ${escapeData(message)}`;
     if (type === "error") {
-        console.error(text);
+        core.error(text);
         return;
     }
     else if (type === "warning") {
-        console.warn(text);
+        core.warning(text);
     }
     else {
-        console.log(text);
+        core.info(text);
     }
 }
 function fileError(message, file, line, column) {
