@@ -10702,18 +10702,17 @@ function escape(s) {
 }
 exports.escape = escape;
 function output(type, message, file, line, column) {
-    //const text = `::${type} file=${escape(file)},line=${line},col=${column}::${escapeData(message)}`;
-    const text = ` ${line}:${column}   ${type}    ${escapeData(message)}`;
-    if (type === "error") {
-        core.error(text);
-        return;
-    }
-    else if (type === "warning") {
-        core.warning(text);
-    }
-    else {
-        core.info(text);
-    }
+    // const text = ` ${line}:${column}   ${type}    ${escapeData(message)}`;
+    // if (type === "error") {
+    // 	core.error(text);
+    // 	return;
+    // } else if (type === "warning") {
+    // 	core.warning(text);
+    // } else {
+    // 	core.info(text);
+    // }
+    const text = `::${type} file=${escape(file)},line=${line},col=${column}::${escapeData(message)}`;
+    core.info(text);
 }
 function fileError(message, file, line, column) {
     output("error", message, file, line, column);
