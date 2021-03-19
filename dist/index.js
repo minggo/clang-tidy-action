@@ -4926,14 +4926,14 @@ function run() {
             let cnt = 0;
             for (const file of diagsMap.keys()) {
                 const diags = diagsMap.get(file);
-                core.startGroup(file);
+                // core.startGroup(file);
                 core.info(file);
                 for (const diag of diags) {
                     output.fileError(`${diag.message} (${diag.name})`, path_1.relative(process.cwd(), diag.filePath), diag.location.line, diag.location.column);
                     cnt += 1;
                 }
                 core.info("");
-                core.endGroup();
+                // core.endGroup();
             }
             if (!noFailure && cnt > 0) {
                 core.setFailed(`Found ${cnt} clang-tidy issues`);
