@@ -5,6 +5,8 @@ import * as output from "./output";
 import {relative} from "path";
 import {parseReplacementsFile, Diagnostic} from "./diagnostics";
 
+import {report_annotations} from "./annotations";
+
 function collectDiagnostic(diags: Diagnostic[]): Map<string, Diagnostic[]> {
 	const map: Map<string, Diagnostic[]> = new Map();
 
@@ -34,8 +36,8 @@ async function run(): Promise<void> {
 		const noFailure = core.getInput("noFailOnIssue") === "true";
 
 		// core.debug(`Parsing replacements ${fixesFile}`);
-
-		const diagsMap = collectDiagnostic(await parseReplacementsFile(fixesFile));
+		const diagList = await parseReplacementsFile(fixesFile);
+		const diagsMap = collectDiagnostic(diagList);
 		let cnt = 0;
 		for (const file of diagsMap.keys()) {
 			const diags = diagsMap.get(file);
@@ -58,6 +60,13 @@ async function run(): Promise<void> {
 			core.setFailed(`Found ${cnt} clang-tidy issues`);
 		} else if (noFailure) {
 			core.debug("Not failing due to option.");
+		}
+
+		try {
+			await report_annotations({success: noFailure, diags: diagList});
+		} catch (e) {
+			core.error(e);
+			core.setFailed(e.message);
 		}
 	} catch (error) {
 		core.setFailed(error.message);

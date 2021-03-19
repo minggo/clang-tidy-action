@@ -46,6 +46,7 @@ export interface Diagnostic {
 	message: string;
 	filePath: string;
 	location: Location;
+	level: string;
 }
 
 interface ClangDiagnosticMessage {
@@ -56,12 +57,17 @@ interface ClangDiagnosticMessage {
 
 interface ClangDiagnostic {
 	DiagnosticName: string;
+	Level: "Warning" | "Error";
 	DiagnosticMessage: ClangDiagnosticMessage;
 }
 
 interface ClangReplacementFile {
 	MainSourceFile?: string;
 	Diagnostics?: ClangDiagnostic[];
+}
+
+function transClangLevel(level: string): string {
+	return level.toLowerCase();
 }
 
 export async function parseReplacementsFile(path: string, options: Partial<ParseOptions> = {}): Promise<Diagnostic[]> {
@@ -90,6 +96,7 @@ export async function parseReplacementsFile(path: string, options: Partial<Parse
 			async diag => {
 				// core.debug(`Processing diagnostic: ${JSON.stringify(diag)}`)
 				return {
+					level: transClangLevel(diag.Level),
 					name: diag.DiagnosticName,
 					message: diag.DiagnosticMessage.Message,
 					filePath: diag.DiagnosticMessage.FilePath,
