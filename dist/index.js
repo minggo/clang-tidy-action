@@ -10325,8 +10325,9 @@ function report_annotations(result) {
                 return {
                     path: ann.filePath,
                     start_line: ann.location.line,
-                    end_line: ann.location.line,
+                    end_line: ann.location.line + 1,
                     start_column: ann.location.column,
+                    end_column: ann.location.column + 1,
                     annotation_level: ann.level,
                     title: ann.level,
                     message: ann.message,
