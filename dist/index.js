@@ -407,6 +407,28 @@ module.exports = Array.isArray || function (arr) {
 
 /***/ }),
 
+/***/ 509:
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+/*!
+ * isobject <https://github.com/jonschlinkert/isobject>
+ *
+ * Copyright (c) 2014-2015, Jon Schlinkert.
+ * Licensed under the MIT License.
+ */
+
+
+
+var isArray = __webpack_require__(893);
+
+module.exports = function isObject(val) {
+  return val != null && typeof val === 'object' && isArray(val) === false;
+};
+
+
+/***/ }),
+
 /***/ 917:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
@@ -4586,7 +4608,7 @@ module.exports = new Type('tag:yaml.org,2002:timestamp', {
 
 
 var isArray  = __webpack_require__(893);
-var isObject = __webpack_require__(310);
+var isObject = __webpack_require__(509);
 var slice = Array.prototype.slice;
 
 module.exports = LineColumnFinder;
@@ -4737,28 +4759,6 @@ function findLowerIndexInRangeArray(value, arr) {
 
 /***/ }),
 
-/***/ 310:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-/*!
- * isobject <https://github.com/jonschlinkert/isobject>
- *
- * Copyright (c) 2014-2015, Jon Schlinkert.
- * Licensed under the MIT License.
- */
-
-
-
-var isArray = __webpack_require__(893);
-
-module.exports = function isObject(val) {
-  return val != null && typeof val === 'object' && isArray(val) === false;
-};
-
-
-/***/ }),
-
 /***/ 579:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -4811,7 +4811,7 @@ const defaultOptions = {
 };
 function determineFileLocation(path, offset, parseOptions) {
     return __awaiter(this, void 0, void 0, function* () {
-        core.debug(`Reading source file ${path}`);
+        // core.debug(`Reading source file ${path}`);
         const content = yield parseOptions.fileReader(path);
         const finder = line_column_1.default(content);
         const info = finder.fromIndex(offset);
@@ -4828,7 +4828,7 @@ function determineFileLocation(path, offset, parseOptions) {
 function parseReplacementsFile(path, options = {}) {
     return __awaiter(this, void 0, void 0, function* () {
         const fullOptions = Object.assign(Object.assign({}, defaultOptions), options);
-        core.debug(`Reading ${path}`);
+        // core.debug(`Reading ${path}`);
         let data;
         try {
             data = yield fullOptions.fileReader(path);
@@ -4842,7 +4842,7 @@ function parseReplacementsFile(path, options = {}) {
             return [];
         }
         return Promise.all(doc.Diagnostics.filter(diag => diag.DiagnosticMessage.FilePath.length > 0).map((diag) => __awaiter(this, void 0, void 0, function* () {
-            core.debug(`Processing diagnostic: ${JSON.stringify(diag)}`);
+            // core.debug(`Processing diagnostic: ${JSON.stringify(diag)}`)
             return {
                 name: diag.DiagnosticName,
                 message: diag.DiagnosticMessage.Message,
@@ -4891,25 +4891,50 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable no-console */
 const core = __importStar(__webpack_require__(186));
 const output = __importStar(__webpack_require__(768));
 const path_1 = __webpack_require__(622);
 const diagnostics_1 = __webpack_require__(579);
+function collectDiagnostic(diags) {
+    var _a, _b;
+    const map = new Map();
+    for (const d of diags) {
+        if (!map.has(d.filePath)) {
+            map.set(d.filePath, []);
+        }
+        (_a = map.get(d.filePath)) === null || _a === void 0 ? void 0 : _a.push(d);
+    }
+    for (const file of map.keys()) {
+        (_b = map.get(file)) === null || _b === void 0 ? void 0 : _b.sort((a, b) => {
+            return a.location.line * 200 + a.location.column - b.location.line * 200 - b.location.column;
+        });
+    }
+    return map;
+}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             core.debug("Start");
             const fixesFile = core.getInput("fixesFile", {
-                required: true
+                required: true,
             });
             const noFailure = core.getInput("noFailOnIssue") === "true";
-            core.debug(`Parsing replacements ${fixesFile}`);
-            const diags = yield diagnostics_1.parseReplacementsFile(fixesFile);
-            for (const diag of diags) {
-                output.fileError(`clang-tidy: ${diag.message} (${diag.name})`, path_1.relative(process.cwd(), diag.filePath), diag.location.line, diag.location.column);
+            // core.debug(`Parsing replacements ${fixesFile}`);
+            const diagsMap = collectDiagnostic(yield diagnostics_1.parseReplacementsFile(fixesFile));
+            let cnt = 0;
+            for (const file of diagsMap.keys()) {
+                const diags = diagsMap.get(file);
+                console.log(file);
+                for (const diag of diags) {
+                    output.fileError(`${diag.message} (${diag.name})`, path_1.relative(process.cwd(), diag.filePath), diag.location.line, diag.location.column);
+                    cnt += 1;
+                }
+                console.log("");
             }
-            if (!noFailure && diags.length > 0) {
-                core.setFailed(`Found ${diags.length} clang-tidy issues`);
+            if (!noFailure && cnt > 0) {
+                core.setFailed(`Found ${cnt} clang-tidy issues`);
             }
             else if (noFailure) {
                 core.debug("Not failing due to option.");
@@ -4943,7 +4968,8 @@ function escape(s) {
         .replace(/;/g, "%3B");
 }
 function output(type, message, file, line, column) {
-    const text = `::${type} file=${escape(file)},line=${line},col=${column}::${escapeData(message)}`;
+    //const text = `::${type} file=${escape(file)},line=${line},col=${column}::${escapeData(message)}`;
+    const text = ` ${line}:${column}   ${type}    ${message}`;
     // eslint-disable-next-line no-console
     console.log(text);
 }

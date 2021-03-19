@@ -12,7 +12,7 @@ function escape(s: string): string {
 
 function output(type: string, message: string, file: string, line: number, column: number): void {
 	//const text = `::${type} file=${escape(file)},line=${line},col=${column}::${escapeData(message)}`;
-	const text = ` ${line}:${column}   ${type}    ${message}`
+	const text = ` ${line}:${column}   ${type}    ${message}`;
 	// eslint-disable-next-line no-console
 	console.log(text);
 }

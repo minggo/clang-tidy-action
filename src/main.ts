@@ -33,7 +33,7 @@ async function run(): Promise<void> {
 		});
 		const noFailure = core.getInput("noFailOnIssue") === "true";
 
-		core.debug(`Parsing replacements ${fixesFile}`);
+		// core.debug(`Parsing replacements ${fixesFile}`);
 
 		const diagsMap = collectDiagnostic(await parseReplacementsFile(fixesFile));
 		let cnt = 0;
