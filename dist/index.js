@@ -10325,7 +10325,7 @@ function report_annotations(result) {
                 return {
                     path: ann.filePath,
                     start_line: ann.location.line,
-                    end_line: ann.location.line + 1,
+                    end_line: ann.location.line,
                     start_column: ann.location.column,
                     end_column: ann.location.column + 1,
                     annotation_level: ann.level,
@@ -10437,7 +10437,7 @@ exports.default = {
     REPO: github.context.repo.repo,
     PULL_REQUEST: pullRequest,
     PR_NUMBER: getPrNumber(),
-    CHECK_NAME: "ESLint Report Analysis",
+    CHECK_NAME: "ClangTidy report",
     GITHUB_WORKSPACE: process.env.GITHUB_WORKSPACE,
     TOKEN: token,
     OCTOKIT: octokit,
