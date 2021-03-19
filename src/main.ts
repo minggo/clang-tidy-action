@@ -39,7 +39,7 @@ async function run(): Promise<void> {
 		let cnt = 0;
 		for (const file of diagsMap.keys()) {
 			const diags = diagsMap.get(file);
-			core.startGroup(file);
+			// core.startGroup(file);
 			core.info(file);
 			for (const diag of diags!) {
 				output.fileError(
@@ -51,7 +51,7 @@ async function run(): Promise<void> {
 				cnt += 1;
 			}
 			core.info("");
-			core.endGroup();
+			// core.endGroup();
 		}
 
 		if (!noFailure && cnt > 0) {
