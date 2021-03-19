@@ -10327,7 +10327,7 @@ function report_annotations(result) {
                     start_line: ann.location.line,
                     end_line: ann.location.line,
                     start_column: ann.location.column,
-                    annatation_level: ann.level,
+                    annotation_level: ann.level,
                     title: ann.level,
                     message: ann.message,
                 };
