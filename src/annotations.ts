@@ -7,6 +7,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 
 import * as core from "@actions/core";
+import {relative} from "path";
 import CONSTANTS from "./constants";
 import {Diagnostic} from "./diagnostics";
 
@@ -53,7 +54,7 @@ export async function report_annotations(result: {success: boolean; diags: Diagn
 		 */
 		const annotations = result.diags.map(ann => {
 			return {
-				path: ann.filePath,
+				path: relative(process.cwd(), ann.filePath),
 				start_line: ann.location.line,
 				end_line: ann.location.line,
 				start_column: ann.location.column,

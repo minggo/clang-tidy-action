@@ -10284,6 +10284,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.report_annotations = void 0;
 const core = __importStar(__webpack_require__(2186));
+const path_1 = __webpack_require__(5622);
 const constants_1 = __importDefault(__webpack_require__(9042));
 const { CHECK_NAME, OCTOKIT, OWNER, REPO, SHA } = constants_1.default;
 function report_annotations(result) {
@@ -10323,7 +10324,7 @@ function report_annotations(result) {
              */
             const annotations = result.diags.map(ann => {
                 return {
-                    path: ann.filePath,
+                    path: path_1.relative(process.cwd(), ann.filePath),
                     start_line: ann.location.line,
                     end_line: ann.location.line,
                     start_column: ann.location.column,
