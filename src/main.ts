@@ -62,12 +62,12 @@ async function run(): Promise<void> {
 			core.debug("Not failing due to option.");
 		}
 
-		try {
-			await report_annotations({success: noFailure, diags: diagList});
-		} catch (e) {
-			core.error(e);
-			core.setFailed(e.message);
-		}
+		// try {
+		// 	await report_annotations({success: noFailure, diags: diagList});
+		// } catch (e) {
+		// 	core.error(e);
+		// 	core.setFailed(e.message);
+		// }
 	} catch (error) {
 		core.setFailed(error.message);
 	}
