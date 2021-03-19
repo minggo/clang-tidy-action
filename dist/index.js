@@ -4957,6 +4957,7 @@ run().catch(e => core.error(e));
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.fileWarning = exports.fileError = void 0;
+/* eslint-disable no-console */
 function escapeData(s) {
     return s.replace(/\r/g, "%0D").replace(/\n/g, "%0A");
 }
@@ -4971,7 +4972,16 @@ function output(type, message, file, line, column) {
     //const text = `::${type} file=${escape(file)},line=${line},col=${column}::${escapeData(message)}`;
     const text = ` ${line}:${column}   ${type}    ${message}`;
     // eslint-disable-next-line no-console
-    console.log(text);
+    if (type === "error") {
+        console.error(text);
+        return;
+    }
+    else if (type === "warning") {
+        console.warn(text);
+    }
+    else {
+        console.log(text);
+    }
 }
 function fileError(message, file, line, column) {
     output("error", message, file, line, column);
