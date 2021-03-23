@@ -44,6 +44,7 @@ async function run(): Promise<void> {
 			// core.startGroup(file);
 			core.info(file);
 			for (const diag of diags!) {
+				/// do not use logs, warnings are limited to 10
 				// output.fileError(
 				// 	`${diag.message} (${diag.name})`,
 				// 	relative(process.cwd(), diag.filePath),
