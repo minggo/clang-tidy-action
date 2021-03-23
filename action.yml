@@ -5,6 +5,12 @@ inputs:
   fixesFile:
     description: 'Path to the replacement file produced by -export-fixes'
     required: true
+  repo-token: 
+    description: 'Github Token'
+    required: true
+  noFailOnIssue:
+    description: 'Prevent failures'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
