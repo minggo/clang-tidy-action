@@ -64,7 +64,7 @@ async function run(): Promise<void> {
 		}
 
 		try {
-			await report_annotations({success: noFailure, diags: diagList});
+			await report_annotations({success: noFailure ? true : cnt === 0, diags: diagList});
 		} catch (e) {
 			core.error(e);
 			core.setFailed(e.message);

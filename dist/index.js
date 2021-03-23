@@ -10630,6 +10630,7 @@ function run() {
                 // core.startGroup(file);
                 core.info(file);
                 for (const diag of diags) {
+                    /// do not use logs, warnings are limited to 10
                     // output.fileError(
                     // 	`${diag.message} (${diag.name})`,
                     // 	relative(process.cwd(), diag.filePath),
@@ -10648,7 +10649,7 @@ function run() {
                 core.debug("Not failing due to option.");
             }
             try {
-                yield annotations_1.report_annotations({ success: noFailure, diags: diagList });
+                yield annotations_1.report_annotations({ success: noFailure ? true : cnt === 0, diags: diagList });
             }
             catch (e) {
                 core.error(e);
