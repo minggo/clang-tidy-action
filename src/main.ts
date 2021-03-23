@@ -44,12 +44,12 @@ async function run(): Promise<void> {
 			// core.startGroup(file);
 			core.info(file);
 			for (const diag of diags!) {
-				output.fileError(
-					`${diag.message} (${diag.name})`,
-					relative(process.cwd(), diag.filePath),
-					diag.location.line,
-					diag.location.column,
-				);
+				// output.fileError(
+				// 	`${diag.message} (${diag.name})`,
+				// 	relative(process.cwd(), diag.filePath),
+				// 	diag.location.line,
+				// 	diag.location.column,
+				// );
 				cnt += 1;
 			}
 			core.info("");
@@ -62,12 +62,12 @@ async function run(): Promise<void> {
 			core.debug("Not failing due to option.");
 		}
 
-		// try {
-		// 	await report_annotations({success: noFailure, diags: diagList});
-		// } catch (e) {
-		// 	core.error(e);
-		// 	core.setFailed(e.message);
-		// }
+		try {
+			await report_annotations({success: noFailure, diags: diagList});
+		} catch (e) {
+			core.error(e);
+			core.setFailed(e.message);
+		}
 	} catch (error) {
 		core.setFailed(error.message);
 	}
