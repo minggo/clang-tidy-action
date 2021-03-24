@@ -2,6 +2,7 @@ import * as github from "@actions/github";
 import * as core from "@actions/core";
 
 const token = core.getInput("repo-token", {required: true});
+const errorLimit = core.getInput("error-limit", {required: true});
 const octokit = github.getOctokit(token);
 const pullRequest = github.context.payload.pull_request;
 
@@ -31,4 +32,5 @@ export default {
 	TOKEN: token,
 	OCTOKIT: octokit,
 	SHA: getSha(),
+	ERROR_LIMIT: parseInt(errorLimit),
 };

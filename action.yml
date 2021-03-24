@@ -11,6 +11,9 @@ inputs:
   noFailOnIssue:
     description: 'Prevent failures'
     required: false
+  error-limit:
+    description: 'Max number of error annotations'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'

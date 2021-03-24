@@ -10286,7 +10286,7 @@ exports.report_annotations = void 0;
 const core = __importStar(__webpack_require__(2186));
 const path_1 = __webpack_require__(5622);
 const constants_1 = __importDefault(__webpack_require__(9042));
-const { CHECK_NAME, OCTOKIT, OWNER, REPO, SHA } = constants_1.default;
+const { CHECK_NAME, OCTOKIT, OWNER, REPO, SHA, ERROR_LIMIT } = constants_1.default;
 function report_annotations(result) {
     return __awaiter(this, void 0, void 0, function* () {
         const conclusion = result.success ? "success" : "failure";
@@ -10322,7 +10322,7 @@ function report_annotations(result) {
              *
              * See https://developer.github.com/v3/checks/runs/#output-object-1
              */
-            const annotations = result.diags.map(ann => {
+            let annotations = result.diags.map(ann => {
                 return {
                     path: path_1.relative(process.cwd(), ann.filePath),
                     start_line: ann.location.line,
@@ -10334,6 +10334,7 @@ function report_annotations(result) {
                     message: ann.message,
                 };
             });
+            annotations = annotations.splice(0, ERROR_LIMIT);
             const numberOfAnnotations = annotations.length;
             let batch = 0;
             const batchSize = 50;
@@ -10421,6 +10422,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const github = __importStar(__webpack_require__(5438));
 const core = __importStar(__webpack_require__(2186));
 const token = core.getInput("repo-token", { required: true });
+const errorLimit = core.getInput("error-limit", { required: true });
 const octokit = github.getOctokit(token);
 const pullRequest = github.context.payload.pull_request;
 const getPrNumber = () => {
@@ -10445,6 +10447,7 @@ exports.default = {
     TOKEN: token,
     OCTOKIT: octokit,
     SHA: getSha(),
+    ERROR_LIMIT: parseInt(errorLimit),
 };
 
 

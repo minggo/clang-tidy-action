@@ -11,7 +11,7 @@ import {relative} from "path";
 import CONSTANTS from "./constants";
 import {Diagnostic} from "./diagnostics";
 
-const {CHECK_NAME, OCTOKIT, OWNER, REPO, SHA} = CONSTANTS;
+const {CHECK_NAME, OCTOKIT, OWNER, REPO, SHA, ERROR_LIMIT} = CONSTANTS;
 
 export async function report_annotations(result: {success: boolean; diags: Diagnostic[]}): Promise<void> {
 	const conclusion = result.success ? "success" : "failure";
@@ -52,7 +52,7 @@ export async function report_annotations(result: {success: boolean; diags: Diagn
 		 *
 		 * See https://developer.github.com/v3/checks/runs/#output-object-1
 		 */
-		const annotations = result.diags.map(ann => {
+		let annotations = result.diags.map(ann => {
 			return {
 				path: relative(process.cwd(), ann.filePath),
 				start_line: ann.location.line,
@@ -64,6 +64,9 @@ export async function report_annotations(result: {success: boolean; diags: Diagn
 				message: ann.message,
 			};
 		});
+
+		annotations = annotations.splice(0, ERROR_LIMIT);
+
 		const numberOfAnnotations = annotations.length;
 		let batch = 0;
 		const batchSize = 50;
