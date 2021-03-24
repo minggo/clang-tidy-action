@@ -24,8 +24,8 @@ function output(type: string, message: string, file: string, line: number, colum
 	// 	core.info(text);
 	// }
 	const text = `::${type} file=${escape(file)},line=${line},col=${column}::${escapeData(message)}`;
-	core.info(text);
-	// console.log(text);
+	//core.info(text);
+	console.log(text);
 }
 
 export function fileError(message: string, file: string, line: number, column: number): void {
