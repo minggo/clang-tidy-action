@@ -68,7 +68,8 @@ interface ClangReplacementFile {
 
 function transClangLevel(level: string): string {
 	if (level === "Warning") {
-		return "warning";
+		//return "warning";
+		return "failure";
 	} else if (level === "Error") {
 		return "failure";
 	} else {

@@ -10516,7 +10516,8 @@ function determineFileLocation(path, offset, parseOptions) {
 }
 function transClangLevel(level) {
     if (level === "Warning") {
-        return "warning";
+        //return "warning";
+        return "failure";
     }
     else if (level === "Error") {
         return "failure";
