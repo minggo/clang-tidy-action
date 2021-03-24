@@ -106,10 +106,10 @@ export async function report_annotations(result: {success: boolean; diags: Diagn
 		});
 
 		// Fail the action if lint analysis was not successful
-		if (!result.success) {
-			core.setFailed("ESLint errors detected.");
-			process.exit(1);
-		}
+		// if (!result.success) {
+		// 	core.setFailed("ESLint errors detected.");
+		// 	process.exit(1);
+		// }
 	} catch (err) {
 		// Catch any errors from API calls and fail the action
 		core.setFailed(
