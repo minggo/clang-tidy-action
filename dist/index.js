@@ -10366,7 +10366,7 @@ function report_annotations(result) {
                         annotations: annotationBatch,
                     },
                 });
-                core.info(`  ret: ${ret.status}`);
+                core.info(`  ret: ${ret.status}/n ${JSON.stringify(ret)}`);
                 yield delayMs(300);
             }
             core.info(`Update check result ${conclusion}`);
