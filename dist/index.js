@@ -10643,7 +10643,7 @@ function run() {
             // 	// core.endGroup();
             // }
             if (!noFailure && cnt > 0) {
-                core.setFailed(`Found ${cnt} clang-tidy issues`);
+                core.error(`Found ${cnt} clang-tidy issues`);
             }
             else if (noFailure) {
                 core.debug("Not failing due to option.");
