@@ -37,38 +37,33 @@ async function run(): Promise<void> {
 
 		// core.debug(`Parsing replacements ${fixesFile}`);
 		const diagList = await parseReplacementsFile(fixesFile);
-		// const diagsMap = collectDiagnostic(diagList);
+		const diagsMap = collectDiagnostic(diagList);
 		const cnt = diagList.length;
-		// for (const file of diagsMap.keys()) {
-		// 	const diags = diagsMap.get(file);
-		// 	// core.startGroup(file);
-		// 	core.info(file);
-		// 	for (const diag of diags!) {
-		// 		/// do not use logs, warnings are limited to 10
-		// 		// output.fileError(
-		// 		// 	`${diag.message} (${diag.name})`,
-		// 		// 	relative(process.cwd(), diag.filePath),
-		// 		// 	diag.location.line,
-		// 		// 	diag.location.column,
-		// 		// );
-		// 		cnt += 1;
-		// 	}
-		// 	core.info("");
-		// 	// core.endGroup();
-		// }
+		for (const file of diagsMap.keys()) {
+			const diags = diagsMap.get(file);
+			for (const diag of diags!) {
+				/// do not use logs, warnings are limited to 10
+				output.fileError(
+					`${diag.message} (${diag.name})`,
+					relative(process.cwd(), diag.filePath),
+					diag.location.line,
+					diag.location.column,
+				);
+			}
+		}
 
 		if (!noFailure && cnt > 0) {
-			core.error(`Found ${cnt} clang-tidy issues`);
+			core.setFailed(`Found ${cnt} clang-tidy issues`);
 		} else if (noFailure) {
 			core.debug("Not failing due to option.");
 		}
 
-		try {
-			await report_annotations({success: noFailure ? true : cnt === 0, diags: diagList});
-		} catch (e) {
-			core.error(e);
-			core.setFailed(e.message);
-		}
+		// try {
+		// 	await report_annotations({success: noFailure ? true : cnt === 0, diags: diagList});
+		// } catch (e) {
+		// 	core.error(e);
+		// 	core.setFailed(e.message);
+		// }
 	} catch (error) {
 		core.setFailed(error.message);
 	}
