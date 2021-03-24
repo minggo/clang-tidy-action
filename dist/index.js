@@ -10356,6 +10356,7 @@ function report_annotations(result) {
                     },
                 });
             }
+            core.info(`Update check result ${conclusion}`);
             /**
              * Finally, close the GitHub check as completed
              * with any remaining annotations
@@ -10373,6 +10374,7 @@ function report_annotations(result) {
                     annotations: annotations,
                 },
             });
+            core.info(`Check completed!`);
             // Fail the action if lint analysis was not successful
             // if (!result.success) {
             // 	core.setFailed("ESLint errors detected.");

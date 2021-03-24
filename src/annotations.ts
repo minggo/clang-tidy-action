@@ -87,6 +87,8 @@ export async function report_annotations(result: {success: boolean; diags: Diagn
 			});
 		}
 
+		core.info(`Update check result ${conclusion}`);
+
 		/**
 		 * Finally, close the GitHub check as completed
 		 * with any remaining annotations
@@ -105,6 +107,7 @@ export async function report_annotations(result: {success: boolean; diags: Diagn
 			},
 		});
 
+		core.info(`Check completed!`);
 		// Fail the action if lint analysis was not successful
 		// if (!result.success) {
 		// 	core.setFailed("ESLint errors detected.");
