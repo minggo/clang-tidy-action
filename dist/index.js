@@ -10355,7 +10355,7 @@ function report_annotations(result) {
                 const batchMessage = `Found ${numberOfAnnotations} ESLint errors and warnings, processing batch ${batch} of ${numBatches}...`;
                 core.info(batchMessage);
                 const annotationBatch = annotations.splice(0, batchSize);
-                yield OCTOKIT.checks.update({
+                const ret = yield OCTOKIT.checks.update({
                     owner: OWNER,
                     repo: REPO,
                     check_run_id: checkId,
@@ -10366,6 +10366,7 @@ function report_annotations(result) {
                         annotations: annotationBatch,
                     },
                 });
+                core.info(`  ret: ${ret.status}`);
                 yield delayMs(300);
             }
             core.info(`Update check result ${conclusion}`);

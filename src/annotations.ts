@@ -86,7 +86,7 @@ export async function report_annotations(result: {success: boolean; diags: Diagn
 			const batchMessage = `Found ${numberOfAnnotations} ESLint errors and warnings, processing batch ${batch} of ${numBatches}...`;
 			core.info(batchMessage);
 			const annotationBatch = annotations.splice(0, batchSize);
-			await OCTOKIT.checks.update({
+			const ret = await OCTOKIT.checks.update({
 				owner: OWNER,
 				repo: REPO,
 				check_run_id: checkId,
@@ -97,6 +97,7 @@ export async function report_annotations(result: {success: boolean; diags: Diagn
 					annotations: annotationBatch,
 				},
 			});
+			core.info(`  ret: ${ret.status}/n ${JSON.stringify(ret)}`);
 			await delayMs(300);
 		}
 
