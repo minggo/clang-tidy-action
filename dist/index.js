@@ -10287,6 +10287,16 @@ const core = __importStar(__webpack_require__(2186));
 const path_1 = __webpack_require__(5622);
 const constants_1 = __importDefault(__webpack_require__(9042));
 const { CHECK_NAME, OCTOKIT, OWNER, REPO, SHA, ERROR_LIMIT } = constants_1.default;
+function delayMs(ms) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        return new Promise((resolve, _reject) => {
+            setTimeout(() => {
+                resolve();
+            }, ms);
+        });
+    });
+}
 function report_annotations(result) {
     return __awaiter(this, void 0, void 0, function* () {
         const conclusion = result.success ? "success" : "failure";
@@ -10356,6 +10366,7 @@ function report_annotations(result) {
                         annotations: annotationBatch,
                     },
                 });
+                yield delayMs(300);
             }
             core.info(`Update check result ${conclusion}`);
             /**

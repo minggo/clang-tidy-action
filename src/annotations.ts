@@ -13,6 +13,15 @@ import {Diagnostic} from "./diagnostics";
 
 const {CHECK_NAME, OCTOKIT, OWNER, REPO, SHA, ERROR_LIMIT} = CONSTANTS;
 
+async function delayMs(ms: number): Promise<void> {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	return new Promise<void>((resolve, _reject) => {
+		setTimeout(() => {
+			resolve();
+		}, ms);
+	});
+}
+
 export async function report_annotations(result: {success: boolean; diags: Diagnostic[]}): Promise<void> {
 	const conclusion = result.success ? "success" : "failure";
 	const currentTimestamp = new Date().toISOString();
@@ -88,6 +97,7 @@ export async function report_annotations(result: {success: boolean; diags: Diagn
 					annotations: annotationBatch,
 				},
 			});
+			await delayMs(300);
 		}
 
 		core.info(`Update check result ${conclusion}`);
