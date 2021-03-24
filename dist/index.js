@@ -10307,7 +10307,7 @@ function report_annotations(result) {
          * annotations in batches to the check,
          * then close the check.
          */
-        core.debug("Fetching files changed in the pull request.");
+        core.info("Try creating a check.");
         // Wrap API calls in try/catch in case there are issues
         try {
             /**
@@ -10322,6 +10322,7 @@ function report_annotations(result) {
                 status: "in_progress",
                 name: CHECK_NAME,
             });
+            core.info("Collecting annotations...");
             /**
              * Update the GitHub check with the
              * annotations from the report analysis.
