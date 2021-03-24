@@ -37,19 +37,16 @@ async function run(): Promise<void> {
 
 		// core.debug(`Parsing replacements ${fixesFile}`);
 		const diagList = await parseReplacementsFile(fixesFile);
-		const diagsMap = collectDiagnostic(diagList);
+		// const diagsMap = collectDiagnostic(diagList);
 		const cnt = diagList.length;
-		for (const file of diagsMap.keys()) {
-			const diags = diagsMap.get(file);
-			for (const diag of diags!) {
-				/// do not use logs, warnings are limited to 10
-				output.fileError(
-					`${diag.message} (${diag.name})`,
-					relative(process.cwd(), diag.filePath),
-					diag.location.line,
-					diag.location.column,
-				);
-			}
+		for (const diag of diagList) {
+			/// do not use logs, warnings are limited to 10
+			output.fileError(
+				`${diag.message} (${diag.name})`,
+				relative(process.cwd(), diag.filePath),
+				diag.location.line,
+				diag.location.column,
+			);
 		}
 
 		if (!noFailure && cnt > 0) {
