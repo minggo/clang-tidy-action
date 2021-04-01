@@ -10648,6 +10648,7 @@ function run() {
             const cnt = diagList.length;
             const useLog = true;
             if (useLog) {
+                // 使用 log 输出错误
                 for (const diag of diagList) {
                     /// do not use logs, warnings are limited to 10
                     output.fileError(`${diag.message} (${diag.name})`, path_1.relative(process.cwd(), diag.filePath), diag.location.line, diag.location.column);
@@ -10660,6 +10661,7 @@ function run() {
                 }
             }
             else {
+                // 使用 Github Check API 输出错误
                 try {
                     yield annotations_1.report_annotations({ success: noFailure ? true : cnt === 0, diags: diagList });
                 }

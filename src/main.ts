@@ -41,6 +41,7 @@ async function run (): Promise<void> {
 		const cnt = diagList.length;
 		const useLog = true;
 		if (useLog) {
+			// 使用 log 输出错误
 			for (const diag of diagList) {
 				/// do not use logs, warnings are limited to 10
 				output.fileError(
@@ -57,6 +58,7 @@ async function run (): Promise<void> {
 				core.debug("Not failing due to option.");
 			}
 		} else {
+			// 使用 Github Check API 输出错误
 			try {
 				await report_annotations({success: noFailure ? true : cnt === 0, diags: diagList});
 			} catch (e) {
