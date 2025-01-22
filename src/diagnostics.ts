@@ -25,6 +25,9 @@ async function determineFileLocation(path: string, offset: number, parseOptions:
 	const info = finder.fromIndex(offset);
 
 	if (info === null) {
+		core.debug("content: " + content);
+		core.debug("offset: " + offset);
+		core.debug("path: " + path);
 		throw Error("Offset out of range!");
 	}
 
