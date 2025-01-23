@@ -28,6 +28,9 @@ async function determineFileLocation(path: string, offset: number, parseOptions:
 		core.debug("content: " + content);
 		core.debug("offset: " + offset);
 		core.debug("path: " + path);
+		console.log("content: " + content);
+		console.log("offset: " + offset);
+		console.log("path: " + path);
 		throw Error("Offset out of range!");
 	}
 
