@@ -10523,6 +10523,8 @@ function determineFileLocation(path, offset, parseOptions) {
         const finder = line_column_1.default(content);
         const info = finder.fromIndex(offset);
         if (info === null) {
+            console.log("offset: " + offset);
+            console.log("path: " + path);
             throw Error("Offset out of range!");
         }
         return {
